@@ -14,12 +14,6 @@
       <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <div class="container" id="app">
-      <div class="double-wrap" :class="{ hide: !loading }">
-        <div class="double">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
-        </div>
-      </div>
       <section class="kv w-640"><img src="https://picsum.photos/640/360" width="640" height="360" alt="主視覺"/></section>
       <section class="form w-640">
         <div class="text-center">
@@ -27,16 +21,41 @@
         </div>
         <div class="form-group">
           <label for="main_id">請輸入 ID </label>
-          <input class="form-control" id="main_id" type="number" v-model="id" @input="limitIdLen(id)"/>
+          <input class="form-control" id="main_id" type="text"/>
         </div>
         <div class="form-group">
           <label for="site">桌次</label>
-          <input class="form-control" id="site" type="text" v-model="person.site" disabled="disabled"/>
+          <input class="form-control" id="site" type="text" disabled="disabled"/>
         </div>
         
       </section>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
-    <script src="dist/main.min.js" type="module"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		var data;
+		$.ajax({
+			url: "data.json",
+			type: "GET",
+			dataType: "json",
+			success: function(Jdata) {
+			    data = Jdata;
+			}, 
+			error: function() {
+				alert("ERROR!!!");
+			}
+		});
+		$("#main_id").on("input", function() {
+			var flag = false;
+			$.each(data, function(index,a) {
+				if($("#main_id").val() == a.id){
+					$("#site").val(a.site);
+					flag = true;
+					return false;
+				}
+			});
+			if (flag==false)
+				$("#site").val("");
+		});
+	</script>
   </body>
 </html>
